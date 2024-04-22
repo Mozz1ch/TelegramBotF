@@ -8,11 +8,11 @@ import logging
 from logging.handlers import RotatingFileHandler
 
 # Логирование
-logging.basicConfig(filename='bot.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(filename='bot.log', level=logging.WARNING, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger('bot_logger')
 telegram_logger = logging.getLogger('telegram')
 telegram_logger.setLevel(logging.WARNING)
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.WARNING)
 handler = RotatingFileHandler(
     filename='bot.log',
     maxBytes=1024 * 1024 * 5,  # 5 MB max file size
@@ -102,7 +102,7 @@ def basic_access_only(func):
 # Функции бота
 async def start(update: Update, context: CallbackContext) -> None:
     await update.message.reply_text("Привет! Я бот для управления очередью.")
-    logging.info(f'Пользователь {update.effective_user.username} запустил бота.')
+    logging.warning(f'Пользователь {update.effective_user.username} запустил бота.')
     message = """
 Доступные команды:
 
@@ -125,7 +125,7 @@ async def add(update: Update, context: CallbackContext) -> None:
     session.add(item)
     session.commit()
     await update.message.reply_text(f'Команда {name} добавлена в очередь.')
-    logging.info(f'Команда {name} добавлена в очередь пользователем {update.effective_user.username}')
+    logging.warning(f'Команда {name} добавлена в очередь пользователем {update.effective_user.username}')
 
 @basic_access_only
 async def list_queue(update: Update, context: CallbackContext) -> None:
@@ -151,7 +151,7 @@ async def list_queue(update: Update, context: CallbackContext) -> None:
             message += f'{i+1}. Команда {item.name}\n'
     
     await update.message.reply_text(message)
-    logging.info(f'Пользователь {update.effective_user.username} запросил список очереди.')
+    logging.warning(f'Пользователь {update.effective_user.username} запросил список очереди.')
 
 @limited_access_only
 async def insert_into_queue(update: Update, context: CallbackContext):
@@ -181,7 +181,7 @@ async def insert_into_queue(update: Update, context: CallbackContext):
         session.add_all(items)
         session.commit()
         await update.message.reply_text(f"✅ Команда {name} добавлена в очередь на позицию {position + 1}.")
-        logging.info(f'Пользователь {update.effective_user.username} вставил команду {name} в очередь на позицию {position + 1}')
+        logging.warning(f'Пользователь {update.effective_user.username} вставил команду {name} в очередь на позицию {position + 1}')
     session.close()
 
 @limited_access_only
@@ -212,7 +212,7 @@ async def next_item(update: Update, context: CallbackContext) -> None:
     next_player_info = f"\nСледующая команда идет на счёт: {next_in_line.name}" if next_in_line else ""
 
     await update.message.reply_text(f'Сейчас играет команда: {next_player.name}{next_player_info}')
-    logging.info(f'Пользователь {update.effective_user.username} перешел к следующей команде: {next_player.name}')
+    logging.warning(f'Пользователь {update.effective_user.username} перешел к следующей команде: {next_player.name}')
 
 @limited_access_only
 async def remove_from_queue(update: Update, context: CallbackContext):
@@ -231,7 +231,7 @@ async def remove_from_queue(update: Update, context: CallbackContext):
         session.delete(item_to_remove)
         session.commit()
         await update.message.reply_text(f"✅ Команда {item_to_remove.name} удалена из очереди.")
-        logging.info(f'Пользователь {update.effective_user.username} удалил команду {item_to_remove.name} из очереди.')
+        logging.warning(f'Пользователь {update.effective_user.username} удалил команду {item_to_remove.name} из очереди.')
     session.close()
 
 async def adduser(update: Update, context: CallbackContext):
@@ -247,7 +247,7 @@ async def adduser(update: Update, context: CallbackContext):
         access_level = "full"   
     else:
         await update.message.reply_text("❌ Неверный пароль.")
-        logging.info(f'Пользователь {update.effective_user.username} пытался добавить пользователя {username_with_at} с уровнем доступа {access_level}')
+        logging.warning(f'Пользователь {update.effective_user.username} пытался добавить пользователя {username_with_at} с уровнем доступа {access_level}')
         return
 
     username_with_at = context.args[1]  # Получаем username с "@"
@@ -263,7 +263,7 @@ async def adduser(update: Update, context: CallbackContext):
     session.commit()
     session.close()
     await update.message.reply_text(f"✅ Пользователь {username} добавлен с {access_levels[access_level]}.")
-    logging.info(f'Пользователь {username} добавлен с уровнем доступа {access_levels[access_level]} пользователем {update.effective_user.username}')
+    logging.warning(f'Пользователь {username} добавлен с уровнем доступа {access_levels[access_level]} пользователем {update.effective_user.username}')
 
 @full_access_only
 async def clear_queue(update: Update, context: CallbackContext):
@@ -273,7 +273,7 @@ async def clear_queue(update: Update, context: CallbackContext):
     session.commit()
     session.close()
     await update.message.reply_text("✅ Очередь полностью очищена.")
-    logger.info("Очередь очищена пользователем", extra={"user": update.effective_user.username})
+    logger.warning("Очередь очищена пользователем", extra={"user": update.effective_user.username})
 
 @full_access_only
 async def removeuser(update: Update, context: CallbackContext):
@@ -288,12 +288,12 @@ async def removeuser(update: Update, context: CallbackContext):
         await update.message.reply_text("❌ Пользователь не найден в белом списке.")
     elif user_to_remove.access_level == "full":
         await update.message.reply_text("❌ Невозможно удалить пользователя с полным доступом.")
-        logging.info(f'Пользователь {update.effective_user.username} пытался удалить пользователя {username_with_at}') 
+        logging.warning(f'Пользователь {update.effective_user.username} пытался удалить пользователя {username_with_at}') 
     else:
         session.delete(user_to_remove)
         session.commit()
         await update.message.reply_text(f"✅ Пользователь {username} удален из белого списка.")
-        logging.info(f'Пользователь {username} удален из белого списка пользователем {update.effective_user.username}')
+        logging.warning(f'Пользователь {username} удален из белого списка пользователем {update.effective_user.username}')
     session.close()
 
 async def list_whitelist(update: Update, context: CallbackContext) -> None:
@@ -309,7 +309,7 @@ async def list_whitelist(update: Update, context: CallbackContext) -> None:
         message += f" {item.username} \-\  {access_levels[item.access_level]}\n"
 
     await update.message.reply_text(message, parse_mode=ParseMode.MARKDOWN_V2)
-    logging.info(f'Пользователь {update.effective_user.username} запросил список белого списка.')
+    logging.warning(f'Пользователь {update.effective_user.username} запросил список белого списка.')
 
 # Запуск бота
 update_queue = Queue()

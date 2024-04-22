@@ -318,7 +318,7 @@ async def list_whitelist(update: Update, context: CallbackContext) -> None:
 # Запуск бота
 update_queue = Queue()
 if __name__ == '__main__':
-    application = ApplicationBuilder().token("7121780866:AAHonkqpaYouAg8S1Lnrw-EBUvBMInaxjbw").build()
+    application = ApplicationBuilder().token("7140791741:AAFklhqVhhZVDxRSbOFoHH5B4-fE6eipQfg").build()
     # Определение обработчиков команд
     application.add_handler(CommandHandler("remove", remove_from_queue))
     application.add_handler(CommandHandler("adduser", adduser))

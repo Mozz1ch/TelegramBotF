@@ -1,1 +1,39 @@
-2024-04-22 15:11:22,923 - WARNING - Пользователь Mozzich запросил список белого списка.
+2024-04-22 17:54:25,548 - WARNING - Пользователь Mozzich запросил список очереди.
+2024-04-22 17:54:53,015 - WARNING - Пользователь Mozzich запросил список белого списка.
+2024-04-22 17:54:59,717 - WARNING - Команда Клима добавлена в очередь пользователем Mozzich
+2024-04-22 17:55:04,511 - WARNING - Команда Леши добавлена в очередь пользователем Mozzich
+2024-04-22 17:55:08,451 - WARNING - Команда Темы добавлена в очередь пользователем Mozzich
+2024-04-22 17:55:13,266 - WARNING - Пользователь Mozzich запросил список очереди.
+2024-04-22 17:55:27,304 - ERROR - No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/home/mozz/venv/lib/python3.11/site-packages/telegram/ext/_application.py", line 1173, in process_update
+    await coroutine
+  File "/home/mozz/venv/lib/python3.11/site-packages/telegram/ext/_basehandler.py", line 141, in handle_update
+    return await self.callback(update, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mozz/VScode/Бот наб/bot.py", line 95, in wrapper
+    return await func(update, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mozz/VScode/Бот наб/bot.py", line 178, in insert_into_queue
+    item.position +=1
+TypeError: unsupported operand type(s) for +=: 'NoneType' and 'int'
+2024-04-22 17:55:30,987 - WARNING - Пользователь Mozzich запросил список очереди.
+2024-04-22 18:00:58,538 - WARNING - Пользователь Mozzich запросил список очереди.
+2024-04-22 18:01:07,756 - ERROR - No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/home/mozz/venv/lib/python3.11/site-packages/telegram/ext/_application.py", line 1173, in process_update
+    await coroutine
+  File "/home/mozz/venv/lib/python3.11/site-packages/telegram/ext/_basehandler.py", line 141, in handle_update
+    return await self.callback(update, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mozz/VScode/Бот наб/bot.py", line 95, in wrapper
+    return await func(update, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mozz/VScode/Бот наб/bot.py", line 177, in insert_into_queue
+    if item.position is not None:
+       ^^^^
+UnboundLocalError: cannot access local variable 'item' where it is not associated with a value
+2024-04-22 18:03:48,589 - WARNING - Пользователь Mozzich запросил список очереди.
+2024-04-22 18:03:58,987 - WARNING - Пользователь Mozzich запросил список очереди.
+2024-04-22 18:04:10,857 - WARNING - Очередь очищена пользователем
+2024-04-22 18:04:10,857 - WARNING - Очередь очищена пользователем

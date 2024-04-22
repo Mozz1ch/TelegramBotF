@@ -270,9 +270,10 @@ async def adduser(update: Update, context: CallbackContext):
     logging.info(f'Пользователь {username} добавлен с уровнем доступа {access_levels[access_level]} пользователем {update.effective_user.username}')
 
 @full_access_only
-async def clear_Queue(update: Update, context: CallbackContext):
+async def clear_queue(update: Update, context: CallbackContext):
     session=Session()
     session.query(QueueItem).delete()
+    session.query(CurrentPlayer).delete()
     session.commit()
     session.close()
     await update.message.reply_text("✅ Очередь полностью очищена.")

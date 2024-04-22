@@ -270,6 +270,15 @@ async def adduser(update: Update, context: CallbackContext):
     logging.info(f'Пользователь {username} добавлен с уровнем доступа {access_levels[access_level]} пользователем {update.effective_user.username}')
 
 @full_access_only
+async def clear_Queue(update: Update, context: CallbackContext):
+    session=Session()
+    session.query(QueueItem).delete()
+    session.commit()
+    session.close()
+    await update.message.reply_text("✅ Очередь полностью очищена.")
+    logger.info("Очередь очищена пользователем", extra={"user": update.effective_user.username})
+
+@full_access_only
 async def removeuser(update: Update, context: CallbackContext):
     if not is_master_password(context.args[0]):
         await update.message.reply_text("❌ Неверный мастер-пароль.")
@@ -318,7 +327,8 @@ if __name__ == '__main__':
     application.add_handler(CommandHandler("list", list_queue))
     application.add_handler(CommandHandler("next", next_item))
     application.add_handler(CommandHandler("whitelist", list_whitelist))
-    application.add_handler(CommandHandler("insert", insert_into_queue)) 
+    application.add_handler(CommandHandler("insert", insert_into_queue))
+    application.add_handler(CommandHandler("clearqueue", clear_queue))
 
     # Запуск приложения
     application.run_polling()

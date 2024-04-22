@@ -244,11 +244,7 @@ async def adduser(update: Update, context: CallbackContext):
     elif is_second_master_password(context.args[0]):
         session = Session()
         existing_full_access_user = session.query(WhitelistItem).filter_by(access_level="full").first()
-        if existing_full_access_user:
-            await update.message.reply_text("❌ Пользователь с полным доступом уже существует.")
-            session.close()
-            return
-        else: access_level = "full"   
+        access_level = "full"   
     else:
         await update.message.reply_text("❌ Неверный пароль.")
         logging.info(f'Пользователь {update.effective_user.username} пытался добавить пользователя {username_with_at} с уровнем доступа {access_level}')
@@ -281,7 +277,7 @@ async def clear_queue(update: Update, context: CallbackContext):
 
 @full_access_only
 async def removeuser(update: Update, context: CallbackContext):
-    if not is_master_password(context.args[0]):
+    if not is_second_master_password(context.args[0]):
         await update.message.reply_text("❌ Неверный мастер-пароль.")
         return
     username_with_at = context.args[1]  # Получаем username с "@"

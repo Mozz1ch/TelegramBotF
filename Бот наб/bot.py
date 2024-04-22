@@ -320,15 +320,18 @@ update_queue = Queue()
 if __name__ == '__main__':
     application = ApplicationBuilder().token("7140791741:AAFklhqVhhZVDxRSbOFoHH5B4-fE6eipQfg").build()
     # Определение обработчиков команд
-    application.add_handler(CommandHandler("remove", remove_from_queue))
-    application.add_handler(CommandHandler("adduser", adduser))
-    application.add_handler(CommandHandler("removeuser", removeuser))
+    # Для базовых пользователей
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("add", add))
     application.add_handler(CommandHandler("list", list_queue))
+    # Для ограниченных пользователей 
+    application.add_handler(CommandHandler("remove", remove_from_queue))
     application.add_handler(CommandHandler("next", next_item))
-    application.add_handler(CommandHandler("whitelist", list_whitelist))
     application.add_handler(CommandHandler("insert", insert_into_queue))
+    # Для пользователя с полным уровнем доступа
+    application.add_handler(CommandHandler("whitelist", list_whitelist))
+    application.add_handler(CommandHandler("adduser", adduser))
+    application.add_handler(CommandHandler("removeuser", removeuser))
     application.add_handler(CommandHandler("clearqueue", clear_queue))
 
     # Запуск приложения
